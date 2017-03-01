@@ -1,4 +1,4 @@
-@media screen and (max-width: 1000px) {
+@media screen and (min-width: 100px) {
   .block {
     width: 90%;
     text-align: justify;
@@ -7,50 +7,50 @@
   }
 }
 
+@media screen and (min-width: 1000px) {
+  body {
+      font-family: sans-serif;
+      font-size: 2em;
+    }
+
+    nav {
+      font-size: 3em;
+    }
 
 
-body {
-    font-family: sans-serif;
-    font-size: 2em;
-  }
-
-  nav {
-    font-size: 3em;
-  }
-
-
-  a {
-    text-decoration: none;
-    color: #235C9B;
-  }
-
-  a:visited {
-    text-decoration: none;
-  }
-
-  a:active {
-    color: #232323;
-    font-size: 1em;
-  }
-
-  a:hover {
-      color: #494949;
+    a {
       text-decoration: none;
-  }
+      color: #235C9B;
+    }
 
-  h1 {
-    font-size: 1.5em;
-    text-align: center;
-  }
+    a:visited {
+      text-decoration: none;
+    }
 
-  .block {
-    width: 40%;
-    text-align: justify;
-    margin: 1em;
-    float: left;
-  }
+    a:active {
+      color: #232323;
+      font-size: 1em;
+    }
 
-  img {
-    margin-top: -0.5em;
-    max-width: 100%;
-  }
+    a:hover {
+        color: #494949;
+        text-decoration: none;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      text-align: center;
+    }
+
+    .block {
+      width: 40%;
+      text-align: justify;
+      margin: 1em;
+      float: left;
+    }
+
+    img {
+      margin-top: -0.5em;
+      max-width: 100%;
+    }
+}
