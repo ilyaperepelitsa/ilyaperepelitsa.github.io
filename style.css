@@ -1,7 +1,7 @@
 @media screen and (min-width: 10px) {
   body {
       font-family: sans-serif;
-      font-size: 2em;
+      font-size: 1.5em;
     }
 
     nav {
@@ -9,13 +9,9 @@
     }
 
 
-    a {
+    a, a:visited {
       text-decoration: none;
       color: #96536B;
-    }
-
-    a:visited {
-      text-decoration: none;
     }
 
     a:active {
