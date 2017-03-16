@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 @media screen and (min-width: 10px) {
-  body {
+  html, body {
       font-family: 'Lato', serif;
-      font-size: 1.5em;
+      font-size: 1.2em;
       float: right;	
-      
-      
-/*       float: right; */
-      
     }
-
+ #map {
+height: 1000px;
+ width: 1000px;
+ }
+    
+    
     nav {
       font-size: 3em;
 /*       text-align: center; */
@@ -75,6 +76,19 @@
 
 @media screen and (min-width: 1000px) {
 
+
+  html, body {
+      font-family: 'Lato', serif;
+      font-size: 1.2em;
+      float: right;	
+    }
+    
+ #map {
+height: 1000px;
+ width: 1000px;
+ }
+            
+            
     .block {
       width: 40%;
       text-align: justify;
