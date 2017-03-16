@@ -109,7 +109,7 @@
 	    var watsanLayer;
         $(document).ready(function () {
 
-            cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/f630bcc8-eb2f-11e6-8802-0ee66e2c9693/viz.json').done(function (vis, layers) {
+            cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/f630bcc8-eb2f-11e6-8802-0ee66e2c9693/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
 
             watsanLayer = layers[1].getSubLayer(0);
                     });
