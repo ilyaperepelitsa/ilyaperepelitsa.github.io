@@ -27,6 +27,21 @@
      <a href="contact.html" id = "navi">Contact</a>
    </nav>
    
+      <div class="big">
+   	<h1> Homework July 4. </h1>
+     <p> I did the dropdown before - this time I wanted to populate it with a queried list of distinct values. Using the carto data table SQL here (planning to learn to do something similar using Jquery for a different class).</p>
+             <select class="type-picker">
+
+        </select>
+	 <div id="map1"></div>
+     </div>
+     
+     
+     
+     
+   
+      	
+   
    <div class="big">
    	<h1> Homework Mar 16. </h1>
      <p> There is no way to embed a map in a div and specify its width in % - whenever I try, it breaks (map isn't displayed).</p>
@@ -129,6 +144,32 @@
             });
         </script>
         
+
+
+        <script>
+	    var collisions_layer;
+        $(document).ready(function () {
+
+            cartodb.createVis('map1', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/1f16fe68-f5fe-4393-a13f-038cf92f41f7/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
+
+            collisions_layer = layers[1].getSubLayer(0);
+                    });
+                    
+                $('.type-picker').change(function () {
+                    var type = $(this).val();
+                    var sql;
+                    if (type === 'all') {
+      
+                        sql = "SELECT * FROM collisions";
+                    }
+                    else {
+                        sql = "SELECT * FROM collisions WHERE pavement_rating = '" + type + "'";
+                    }
+                    collisions_layer.setSQL(sql);
+                });
+            });
+        </script>
+
 
 
 
