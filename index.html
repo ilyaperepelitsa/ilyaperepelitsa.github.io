@@ -29,146 +29,91 @@
    
       <div class="big">
    	<h1> Homework July 4. </h1>
-     <p> I did the dropdown before - this time I wanted to populate it with a queried list of distinct values. Using the carto data table SQL here (planning to learn to do something similar using Jquery for a different class).</p>
+<p> I did the dropdown before - this time I wanted to populate it with a queried list of distinct values. Using the carto data table SQL here (planning to learn to do something similar using Jquery for a different class).</p>
              <select class="type-picker">
-
-        </select>
-	 <div id="map1"></div>
-     </div>
-     
-     
-     
-     
-   
-      	
-   
-   <div class="big">
-   	<h1> Homework Mar 16. </h1>
-     <p> There is no way to embed a map in a div and specify its width in % - whenever I try, it breaks (map isn't displayed).</p>
-             <select class="type-picker">
-            <option value="all">All types</option>
-            <option value="NR">NR</option>
-            <option value="GOOD">GOOD</option>
-            <option value="FAIR">FAIR</option>
-            <option value="POOR">POOR</option>
+	             
+	             <option value="all">All types</option>
+				 <option value="Passing or Lane Usage Improper">Passing or Lane Usage Improper</option>
+				 <option value="Driver Inexperience">Driver Inexperience</option>
+				 <option value="Driver Inattention/Distraction">Driver Inattention/Distraction</option>
+				 <option value="Unsafe Speed">Unsafe Speed</option>
 
         </select>
 	 <div id="map"></div>
      </div>
      
      
-    <div class = "block">
-     <h1> Homework Mar 8. </h1>
-     <p> I couldn't finish all the things that I had in mind for some pages. I'm still working on that social media spans. Also, active links behave in some way that I don't know how to control yet</p>
-     <p> I did succeed in spacing the index page columns correctly - now they span the entire page. I also worked with colors however I discarded some nav background color code. I want to create semi-transparent shapes with css and I haven't figured that out completely.</p>
-     <p>Last thing for the main page that did work is importing Google fonts although that was relatively straigtforward.</p>
-     <h1>Now the map CSS inserts:</h1>
-     <p> I didn't have any popups for the map and it took some time to figure out how to add changes that actually make sense and aren't simply an exercise in using CSS (although I do have a bit of that too which I'm going to mention later).</p> 
-	 <p>Mainly I played with the legend fonts - I changed the font size, limited the width of UL element and aligned text labels to the markers using absolute positioning. I also played a bit with inserting an image and aligning it with the UL element using left float and that didn't work out for some reason
-     </p>
-
-    <iframe width="100%" height="520" frameborder="0" src="https://thenewschool.carto.com/u/ilyaperepelitsa/builder/f630bcc8-eb2f-11e6-8802-0ee66e2c9693/embed" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
-    
-     </div>
-   
-   
-
-   <div class = "block">
-     <h1> Origins of this project. </h1>
-     <p> So I decided to learn CV and NLP durinng my last semester at the New School.
-       Though it would be fun to learn something new.</p>
-     <p> The idea is to track someone down - in this case ISIS. Once I set up the scraper
-     I will expand the project to looking for neo-nazis in Russia. The main idea is to track
-   someone when you don't know whom you're looking for.</p>
-     <p>Besides just finding images that look like ISIS flags I want to look into their previous
-       tweets and the tweet that contained an image. The goal here is to determine how to
-     distinguish supporters from News media, critics and so on.</p>
-     <p>I will scrape twitter to identify ISIS supporters:</p>
-     <a href = "https://en.wikipedia.org/wiki/Islamic_State_of_Iraq_and_the_Levant"><img src = "images/isis_flag.jpg"></a>
-   </div>
-
-
-
-   <div class = "block">
-     <h1> Placeholder map. </h1>
-     <p>See next map for assignment part 1. I just like this map more and I also wanted to play with screen resolution and div width.</p>
-     <p>My memory is a bit rusty but it seems like the basics do work (although I had to copy all css code). The next step would be a
-     good cascading setup of selectors to make sure I don't need to copy CSS code.</p>
-        <iframe width="100%" height="900" frameborder="0"
-        src="https://thenewschool.carto.com/u/ilyaperepelitsa/builder/5bc46368-f306-11e6-accb-0e3ebc282e83/embed"
-        allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen>
-        </iframe>
-   </div>
-
-   <div class = "block">
-     <h1> Map with edited legend and popups. </h1>
-     <ol>
-       <li>Legend - Added a link that opens in a new tab and played with items fonts</li>
-       <li>Popups:
-         <ul>
-           <li>Concatenated three address columns into a full address</li>
-           <li>Changed popup categories</li>
-           <li>Added line breaks</li>
-         </ul>
-     </ol>
-        <iframe width="100%" height="900" frameborder="0" src="https://thenewschool.carto.com/u/ilyaperepelitsa/builder/c451efde-ebc4-11e6-a450-0ecd1babdde5/embed"
-        allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen>
-        </iframe>
-   </div>
-   
+      
 
 
         <div id="map"></div>
 
         <script>
-	    var watsanLayer;
+	    var collisionLayer;
         $(document).ready(function () {
 
-            cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/f630bcc8-eb2f-11e6-8802-0ee66e2c9693/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
+            cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/1f16fe68-f5fe-4393-a13f-038cf92f41f7/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
 
-            watsanLayer = layers[1].getSubLayer(0);
+            collisionLayer = layers[1].getSubLayer(0);
+
                     });
+            //var options
+//options = "SELECT DISTINCT contributing_factor_vehicle_1 FROM ilyaperepelitsa.collisions"
+            //collisionLayer.setSQL(options)
+            
+            //var url = "https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql?q=SELECT COUNT(*) FROM collisions WHERE contributing_factor_vehicle_1='Following Too Closely'";
+           var sql_statement = "SELECT DISTINCT contributing_factor_vehicle_1 FROM collisions";
+           $.getJSON('https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql/?q='+sql_statement, function(data) {
+  $.each(data.rows, function(key, val) {
+    console.log(val)
+  });
+});
+           
+           
+            var url = "https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql?"+ $.param({
+                    q: "SELECT COUNT(*) FROM ilyaperepelitsa.collisions WHERE contributing_factor_vehicle_1='Following Too Closely'"});
+               
+                $.getJSON(url)
+                    .done(function(data) {
+                        // Once the data has loaded, update the text in the overlay
+                        //
+                        // If you want to see the data that is returned, uncomment this line:
+                        console.log(data);
+                        //
+                        // In this case we get data.rows[0].count, get rows from 
+                        // data, get the first row, then get count from that.
+                        //$('.sql-overlay').text('There are ' + data
+                    });
+                
                     
                 $('.type-picker').change(function () {
+	                
                     var type = $(this).val();
                     var sql;
                     if (type === 'all') {
-      
-                        sql = "SELECT * FROM street_pavement_rating";
-                    }
-                    else {
-                        sql = "SELECT * FROM street_pavement_rating WHERE pavement_rating = '" + type + "'";
-                    }
-                    watsanLayer.setSQL(sql);
-                });
-            });
-        </script>
-        
-
-
-        <script>
-	    var collisions_layer;
-        $(document).ready(function () {
-
-            cartodb.createVis('map1', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/1f16fe68-f5fe-4393-a13f-038cf92f41f7/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
-
-            collisions_layer = layers[1].getSubLayer(0);
-                    });
-                    
-                $('.type-picker').change(function () {
-                    var type = $(this).val();
-                    var sql;
-                    if (type === 'all') {
+	                    
+	                    
       
                         sql = "SELECT * FROM collisions";
                     }
                     else {
-                        sql = "SELECT * FROM collisions WHERE pavement_rating = '" + type + "'";
+                        sql = "SELECT * FROM collisions WHERE contributing_factor_vehicle_1 = '" + type + "'";
                     }
-                    collisions_layer.setSQL(sql);
+                    collisionLayer.setSQL(sql);
                 });
-            });
+                
+            //"SELECT DISTINCT contributing_factor_vehicle_1 FROM collisions"
+                
+           });
+            
+            
+            
+            
         </script>
+        
+
+
+
 
 
 
