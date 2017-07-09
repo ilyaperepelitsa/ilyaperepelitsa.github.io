@@ -19,7 +19,16 @@ height: 1000px;
       margin-left: 0.6em;
     }
      
-
+	a.ref { 
+	font-size: 1.2em;
+    color: #1F5A83;
+    text-decoration: none;
+	}
+	
+    a.ref:hover {
+    color: #494949;
+    text-decoration: none;
+    }
 
     nav a, nav a:visited {
       text-decoration: none;

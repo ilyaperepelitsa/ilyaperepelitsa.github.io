@@ -28,88 +28,212 @@
    </nav>
    
       <div class="big">
-   	<h1> Homework July 4. </h1>
-<p> I did the dropdown before - this time I wanted to populate it with a queried list of distinct values. Using the carto data table SQL here (planning to learn to do something similar using Jquery for a different class).</p>
-             <select class="type-picker">
+   	<h1> Traffic accidents in NYC from 2012 to 2017. </h1>
+   	<a href = "https://data.cityofnewyork.us/Transportation/Real-Time-Traffic-Speed-Data/xsat-x5sa" class = "ref">Data from NYC OpenData </a>
+   	<p> Total accidents:&emsp; <span id = "total"></span>.</p>
+   	<p> People killed:&emsp; <span id = "killed"></span>.</p>
+   	<p> People injured:&emsp; <span id = "injured"></span>.</p>           
+     
+    <p> Choose the type of "contributing factor" of the traffic accident:</p>             
+    <select class="type-picker" id = "factor">
 	             
-	             <option value="all">All types</option>
-				 <option value="Passing or Lane Usage Improper">Passing or Lane Usage Improper</option>
-				 <option value="Driver Inexperience">Driver Inexperience</option>
-				 <option value="Driver Inattention/Distraction">Driver Inattention/Distraction</option>
-				 <option value="Unsafe Speed">Unsafe Speed</option>
-
-        </select>
+	    <option value="All types">All types</option>
+		
+	</select>
 	 <div id="map"></div>
-     </div>
-     
-     
-      
+	 <div class="sql-overlay"></div>
 
-
-        <div id="map"></div>
-
-        <script>
-	    var collisionLayer;
-        $(document).ready(function () {
-
-            cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/1f16fe68-f5fe-4393-a13f-038cf92f41f7/viz.json', {cartodb_logo: false}).done(function (vis, layers) {
-
-            collisionLayer = layers[1].getSubLayer(0);
-
-                    });
-            //var options
-//options = "SELECT DISTINCT contributing_factor_vehicle_1 FROM ilyaperepelitsa.collisions"
-            //collisionLayer.setSQL(options)
+    <script>
+	    var dataLayer;
+	    // SET THE DROPDOWN OPTIONS
+		var sql_statement = "SELECT DISTINCT contributing_factor_vehicle_1 FROM collisions";
+		
+		        $.getJSON("https://ilyaperepelitsa.carto.com/api/v2/sql?q=" + sql_statement, function(data) {
+					$.each(data.rows, function(key, val) {
+						if (val["contributing_factor_vehicle_1"] != ""){
+							var o = document.createElement("option");
+							o.textContent = val["contributing_factor_vehicle_1"];
+							document.getElementById("factor").appendChild(o);	
+					    };
+			    	});});
+			    	
+			    	
+			    	
+		// CREATE THE BASIC MAP
+		$(document).ready(function () {
+						var input_factor = document.getElementById("factor");
+	
+	
+			input_factor = input_factor.options[input_factor.selectedIndex].text;
+			if (input_factor == "All types"){
+				
+				
+				console.log(input_factor);
+				
+				// total number of accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT COUNT(*) FROM collisions";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_accidents = String(data.rows[0].count);
+				$('#total').text(total_accidents);
+				});	
+				
+				// killed in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT SUM(number_of_persons_killed) FROM collisions";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_killed = String(data.rows[0].sum);
+				$('#killed').text(total_killed);
+				});	
+				// injured in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var injured_sql = "SELECT SUM(number_of_persons_injured) FROM collisions";
+				url += injured_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_injured = String(data.rows[0].sum);
+				$('#injured').text(total_injured);
+				});	
+			} else {
+				console.log(input_factor);
+				
+				// total number of accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT COUNT(*) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_accidents = String(data.rows[0].count);
+				$('#total').text(total_accidents);
+				
+				});	
+				
+				// killed in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT SUM(number_of_persons_killed) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_killed = String(data.rows[0].sum);
+				$('#killed').text(total_killed);
+				});	
+				// injured in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var injured_sql = "SELECT SUM(number_of_persons_injured) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += injured_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_injured = String(data.rows[0].sum);
+				$('#injured').text(total_injured);	
+				});	
+			}
+		    cartodb.createVis('map', 'https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/viz/1f16fe68-f5fe-4393-a13f-038cf92f41f7/viz.json', {cartodb_logo: false})
+		        .done(function (vis, layers) {
+		            collisionLayer = layers[1].getSubLayer(0);
+		            collisionLayer.infowindow.set('template', $('#popup-template').html());
+		        });
+		  
+		});  
+		
+		
+		// FILTER MAP ON THE VALUE FROM THE DROPDOWN
+       $('.type-picker').change(function () {
             
-            //var url = "https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql?q=SELECT COUNT(*) FROM collisions WHERE contributing_factor_vehicle_1='Following Too Closely'";
-           var sql_statement = "SELECT DISTINCT contributing_factor_vehicle_1 FROM collisions";
-           $.getJSON('https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql/?q='+sql_statement, function(data) {
-  $.each(data.rows, function(key, val) {
-    console.log(val)
-  });
-});
-           
-           
-            var url = "https://thenewschool.carto.com/u/ilyaperepelitsa/api/v2/sql?"+ $.param({
-                    q: "SELECT COUNT(*) FROM ilyaperepelitsa.collisions WHERE contributing_factor_vehicle_1='Following Too Closely'"});
-               
-                $.getJSON(url)
-                    .done(function(data) {
-                        // Once the data has loaded, update the text in the overlay
-                        //
-                        // If you want to see the data that is returned, uncomment this line:
-                        console.log(data);
-                        //
-                        // In this case we get data.rows[0].count, get rows from 
-                        // data, get the first row, then get count from that.
-                        //$('.sql-overlay').text('There are ' + data
-                    });
-                
-                    
-                $('.type-picker').change(function () {
-	                
-                    var type = $(this).val();
-                    var sql;
-                    if (type === 'all') {
-	                    
-	                    
-      
-                        sql = "SELECT * FROM collisions";
-                    }
-                    else {
-                        sql = "SELECT * FROM collisions WHERE contributing_factor_vehicle_1 = '" + type + "'";
-                    }
-                    collisionLayer.setSQL(sql);
-                });
-                
-            //"SELECT DISTINCT contributing_factor_vehicle_1 FROM collisions"
-                
-           });
-            
-            
-            
-            
-        </script>
+            var type = $(this).val();
+            var sql;
+            if (type == 'All types') {
+
+                sql = "SELECT * FROM collisions";
+            }
+            else {
+                sql = "SELECT * FROM collisions WHERE contributing_factor_vehicle_1 = '" + type + "'";
+            }
+            collisionLayer.setSQL(sql);
+        });
+
+
+
+		$('.type-picker').change(function () {
+			var input_factor = document.getElementById("factor");
+	
+	
+			input_factor = input_factor.options[input_factor.selectedIndex].text;
+			if (input_factor == "All types"){
+				
+				
+				console.log(input_factor);
+				
+				// total number of accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT COUNT(*) FROM collisions";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_accidents = String(data.rows[0].count);
+				$('#total').text(total_accidents);
+				});	
+				
+				// killed in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT SUM(number_of_persons_killed) FROM collisions";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_killed = String(data.rows[0].sum);
+				$('#killed').text(total_killed);
+				});	
+				// injured in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var injured_sql = "SELECT SUM(number_of_persons_injured) FROM collisions";
+				url += injured_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_injured = String(data.rows[0].sum);
+				$('#injured').text(total_injured);
+				});	
+			} else {
+				console.log(input_factor);
+				
+				// total number of accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT COUNT(*) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_accidents = String(data.rows[0].count);
+				$('#total').text(total_accidents);
+				
+				});	
+				
+				// killed in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var killed_sql = "SELECT SUM(number_of_persons_killed) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += killed_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_killed = String(data.rows[0].sum);
+				$('#killed').text(total_killed);
+				});	
+				// injured in all accidents
+				var url = "https://ilyaperepelitsa.carto.com/api/v2/sql?q=";
+				var injured_sql = "SELECT SUM(number_of_persons_injured) FROM collisions WHERE contributing_factor_vehicle_1='" + input_factor + "'";
+				url += injured_sql;
+				$.getJSON(url)
+				.done(function(data) {
+				var total_injured = String(data.rows[0].sum);
+				$('#injured').text(total_injured);	
+				});	
+			}
+		});
+
+
+
+            // WHERE contributing_factor_vehicle_1='" + input_factor + "'"});
+    </script>
         
 
 
@@ -118,7 +242,16 @@
 
 
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-102250756-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 
  </body>
 
