@@ -15,31 +15,6 @@
     
   </head>
   <body>
-	  
-	  <form name = "filter_form">
-  <input type="radio" name="filter" value="all_causes" checked> All causes<br>
-  <input type="radio" name="filter" value="all_states"> All states<br>
-  
-	  </form>
-	  <select id="causes" disabled>
-	  </select>
-	  
-	  <select id="states">
-	  </select>
-	  
-	  <script>
-	  $('input:radio[name="filter"]').change(function() {
-    if ($(this).val()=='all_causes') {
-        $('#states').attr('disabled', false);
-        $('#causes').attr('disabled', true);
-        
-      
-    } 
-    else if ($(this).val()=='all_states') {
-        $('#states').attr('disabled', true);
-        $('#causes').attr('disabled', false);
-    }
-});
-	</script>
+
   </body>
 </html>
