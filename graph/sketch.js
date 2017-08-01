@@ -174,32 +174,32 @@ for (var lx = 1; lx < 7; lx++){
 noStroke();
 fill(160, 79, 63)
 var orange_text = "Bots following me and dropping: " + up_flat_down_coord.length;
-text(orange_text, 30, 80);
+text(orange_text, 30, 80 - 25);
 
 fill(117, 101, 14)
 var swamp_text = "I followed, they followerd back and dropped: " + flat_down_up_coord.length;
-text(swamp_text, 30, 80 + 25);
+text(swamp_text, 30, 80 + 25 - 25);
 
 fill(2, 122, 106)
 var teal_text = "I am following and they dropped: " + flat_up_coord.length;
-text(teal_text, 30, 80 + 25 + 25);
+text(teal_text, 30, 80 + 25 + 25 - 25);
 
 fill(89, 221, 77)
 var lgreen_text = "I followed and they followed back: " + flat_down_coord.length;
-text(lgreen_text, 30, 80 + 25 + 25 + 25);
+text(lgreen_text, 30, 80 + 25 + 25 + 25 - 25);
 
 
 fill(2, 122, 64)
 var dgreen_text = "My pre-bot followers : " + flat.length;
-text(dgreen_text, 30, 80 + 25 + 25 + 25 + 25);
+text(dgreen_text, 30, 80 + 25 + 25 + 25 + 25 - 25);
 
 fill(219, 142, 41)
 var orange_text = "Bots following me : " + up_flat_coord.length;
-text(orange_text, 30, 80 + 25 + 25 + 25 + 25 + 25);	
+text(orange_text, 30, 80 + 25 + 25 + 25 + 25 + 25 - 25);	
 
 fill(169, 169, 169)
 var white_text = "I followed and they didn't respond : " + up_flat_up.length + " (obviously not plotted)";
-text(white_text, 30, 80 + 25 + 25 + 25 + 25 + 25 + 25);	
+text(white_text, 30, 80 + 25 + 25 + 25 + 25 + 25 + 25 - 25);	
 
 
 
