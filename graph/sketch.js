@@ -82,7 +82,7 @@ function setup() {
 		}
 		}
 		
-	console.log(up_flat_up.length);
+// 	console.log(up_flat_up.length);
 	/*
 	console.log(flat.length);
 	console.log(up_flat_up.length);
@@ -92,8 +92,10 @@ function setup() {
 	console.log(up_flat.length);
 	console.log(up_flat_down.length);
 	*/
+/*
 	console.log(flat_down);
-	console.log(flat.length  + flat_up.length + flat_down.length + flat_down_up.length + up_flat.length + up_flat_down.length);
+	console.log(flat.length  + flat_up.length + flat_down.length + flat_down_up.length + up_flat.length + up_flat_down.length)
+*/;
 	
 // 	console.log(up_flat_up);
 /*
@@ -117,7 +119,7 @@ function setup() {
 // 		console.log(flat_down[i]["unfollowed"]);
 		var x1 = (flat_down[i]["following"] - 2 + Math.random());
 		var x2 = (flat_down[i]["follower"] - 2 + Math.random());
-		var y = Math.random() * (windowHeight/3) + 2 * windowHeight/8;
+		var y = Math.random() * (windowHeight/5) + 2 * windowHeight/8;
 		flat_down_coord.push([x1, x2, y]);
 	}
 	
