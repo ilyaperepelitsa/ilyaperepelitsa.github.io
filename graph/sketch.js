@@ -343,7 +343,7 @@ for(var i = 0; i <= up_flat_coord.length; i ++){
 
 
 noStroke();
-// stroke(0, 0, 0);
+stroke(0, 0, 0);
 fill(221, 221, 221)
 var white_text1 = "I clicked 'follow'";
 text(white_text1, white_x1 + 30, white_y-15);
