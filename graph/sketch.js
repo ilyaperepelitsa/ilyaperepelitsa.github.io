@@ -1,295 +1,360 @@
-  var state_colors = [];
-	for (var n = 0; n < 51; n++){
-		var one_state = [];
-		for (var m = 0; m < 3; m++){
-			one_state.push(Math.floor(Math.random() * (255 - 100) + 100));
-					}
-		state_colors.push(one_state);
-		
-	}
-	console.log(state_colors);
+// Users I followed
+var up_flat_up = [];
+var flat_down = [];
+var flat_down_up = [];
 
-  var cause_colors = [];
-	for (var n = 0; n < 16; n++){
-		var one_cause = [];
-		for (var m = 0; m < 3; m++){
-			one_cause.push(Math.floor(Math.random() * (255 - 100) + 100));
-					}
-		cause_colors.push(one_cause);
-		
-	}
-	console.log(cause_colors);
-	
+// Users followed me
+var up_flat = [];
+var up_flat_down = [];
+
+// My usual followers
+var flat = [];
+var flat_up = [];
+
+
+
+var flat_up_coord = [];
+var flat_down_coord = [];
+var flat_down_up_coord = [];
+var up_flat_coord = [];
+var up_flat_down_coord = [];
+
+var white_x1 = 0;
+var white_x2 = 0;
+var white_y = 0;
+
 
 function preload() {
   //my table is comma separated value "csv"
   //and has a header specifying the columns labels
-  table = loadTable("data/state_cause.csv", "csv", "header");
+  table = loadTable("data/working.csv", "csv", "header");
   console.log(table);
+  
+ 
   
 
 }
 
+
+
 function setup() {
 	
+ /*
+	var states = table.getColumn(0);
+	console.log(states)
+*/
+	
+
+	
+	// 	var just = [];
+	
+	for (var i = 0; i < table.getRowCount(); i ++){
+		// print the row
+	// 		console.log(table.getRow(i));
+		
+		var row = table.getRow(i);
+		var entry = new Object();
+		for (var c = 1; c < table.getColumnCount(); c++){
+	/*
+			console.log(c)
+			console.log(row.getString(c));
+	*/			if (row.getString(c) != ""){
+				entry[row.getString(c)] = c;
+			}
+			
+		}
+		if (("follower" in entry) && (entry["follower"] == 1) && (Object.keys(entry).length == 1)){
+			flat.push(entry);
+		}
+		 else if (("following" in entry)  && (Object.keys(entry).length == 1)){
+			up_flat_up.push(entry);
+		} 
+		else if (("follower" in entry) && (entry["follower"] == 1) && ("unfollowed" in entry)){
+			flat_up.push(entry);
+		} else if (("follower" in entry) && (entry["follower"] != 1) && ("following" in entry) && (!("unfollowed" in entry))){
+			flat_down.push(entry);
+		} else if (("follower" in entry) && (entry["follower"] != 1) && ("unfollowed" in entry) && ("following" in entry)){
+			flat_down_up.push(entry);
+		} else if (("follower" in entry) && (Object.keys(entry).length == 1)){
+			up_flat.push(entry);
+		} else if ((!("following" in entry)) && ("follower" in entry) && ("unfollowed" in entry)){
+			up_flat_down.push(entry);
+		}
+		}
+		
+	console.log(up_flat_up.length);
+	/*
+	console.log(flat.length);
+	console.log(up_flat_up.length);
+	console.log(flat_up.length);
+	console.log(flat_down.length);
+	console.log(flat_down_up.length);
+	console.log(up_flat.length);
+	console.log(up_flat_down.length);
+	*/
+	console.log(flat_down);
+	console.log(flat.length  + flat_up.length + flat_down.length + flat_down_up.length + up_flat.length + up_flat_down.length);
+	
+// 	console.log(up_flat_up);
+/*
+	for (var i = 0; i <= up_flat_up.length; i ++){
+	console.log(up_flat_up[i])
+	}
+*/
+	
+	flat_height_max = 2 * windowHeight/3 + flat.length/3;
+	flat_height_min = 2 * windowHeight/3;
 	
 	
-//THIS IS JUST GENERAL EXAMPLES ABOUT LOOPING THROUGH ROWS AND COLUMNS
-  //count the columns
-   console.log(table.getRowCount() + " total rows in table");
-   console.log(table.getColumnCount() + " total columns in table");
-
-
-
-   unique = function(itm, i, table) {
-    return i == table.indexOf(itm);
-		};
-
-	var causes = table.getColumn(1).filter(function(item, i, ar){ return ar.indexOf(item) === i; });
-	console.log(causes.length);
-
-	causes.forEach(function(item) {
-		var o = document.createElement("option");
-		o.textContent = item;
-		document.getElementById("causes").appendChild(o);
-	});
-
-
-	var states = table.getColumn(2).filter(function(item, i, ar){ return ar.indexOf(item) === i; });
-	console.log(states.length);
-
-	states.forEach(function(item) {
-		var o = document.createElement("option");
-		o.textContent = item;
-		document.getElementById("states").appendChild(o);
-	});
-
-
-
-
-
-}
-	//var select = document.getElementById("selector");
-	//select.innerHTML = "";
-
-	//var i = 0
-	//for(i = 0; i < unique.length; i++) {
-
-	//	console.log(i);
-		//var opt = char(unique[i]);
-		//select.innerHTML += "<option value=\"" + opt + "\>" + opt + "</option>";
-	//}
-
-		//console.log(table.getColumn(1));
-  // console.log(table.getColumn("name"));
-
-  //cycle through the table
-//   for (var r = 0; r < table.getRowCount(); r++)
-//     for (var c = 0; c < table.getColumnCount(); c++) {
-//       // console.log(table.getString(r, c));
-//     }
-function draw() {
-   
-   createCanvas(windowWidth, windowHeight);
-   stroke(255);
-   text("Share of causes of death in the U.S.",20,20);
-   //stroke(255);
-   background(40);
-
-
-
-
-  if(document.filter_form.filter[0].checked){
-   // code for all causes
-   var state = document.getElementById("states");
-   state = state.options[state.selectedIndex].text;
-   var newRows = table.findRows(state, "STATE");
-
-
-   var inputX = maxX(newRows);
-   //console.log(inputX);
-
-   makeAxis(inputX);
-
-   var causeList = [];
-   for (var i = 0; i < newRows.length; i ++){
-	   var pew = newRows[i];
-	   //console.log(pew);
-
-	for (var i = 0; i < newRows.length; i++) {
-	     //console.log(newRows[i].getString("CAUSE_NAME"));
-     	//IT GETS THINGS READY TO DRAW
-      var countryName = newRows[i].getString("CAUSE_NAME");
-       //console.log(countryName);
-        textAlign(RIGHT,CENTER);
-        var startYpoint = 0;
-        //stroke(random(0, 255), random(0, 255), random(0, 255));
-        var thisStroke = cause_colors[i];
-        stroke(thisStroke[0], thisStroke[1], thisStroke[2]);
-        fill(0);
-        noFill();
-        beginShape();
-         //THEN IT LOOPS THROUGH COLUMNS TO GET THE POINTS FOR THAT COUNTRY
-        for (var c = 1999; c < 2014; c++) {
-          var theYear = c;
-          var Yvalue = Number(newRows[i].getString(String(theYear)))
-          //console.log(Yvalue);
-          if(!isNaN(Yvalue) && Yvalue > 0) {
-            var Xpoint = map(theYear,1999, 2013, 150, width-50);
-            var Ypoint = map(Yvalue,0, inputX, height-50,50);
-            ellipse(Xpoint,Ypoint,8,8);
-            if(startYpoint === 0) {
-              startYpoint = Yvalue;
-              strokeWeight(1);
-              text(countryName,Xpoint-10,Ypoint);
-              strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-              curveVertex(Xpoint,Ypoint);
-            } else if (c == table.getColumnCount() - 1) {
-	          strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-              curveVertex(Xpoint,Ypoint);
-              } else {
-	          strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-
-            }
-          }
-
-        }
-        endShape();
-
-     }
-   }
-
-   //var finalColumn = newRows.getColumn("CAUSE_NAME");
-   //console.log(newRows);
-   //console.log(newRows);
-   //console.log(state);
-
-   } else if (document.filter_form.filter[1].checked){
-   // code for all states
-   var cause = document.getElementById("causes");
-   cause = cause.options[cause.selectedIndex].text;
-   var newRows = table.findRows(cause, "CAUSE_NAME");
-
-    var inputX = maxX(newRows);
-   //console.log(inputX);
-
-    makeAxis(inputX);
-
-
-    for (var i = 0; i < newRows.length; i++) {
-	     //console.log(newRows[i].getString("CAUSE_NAME"));
-     	//IT GETS THINGS READY TO DRAW
-      var countryName = newRows[i].getString("STATE");
-       //console.log(countryName);
-        textAlign(RIGHT,CENTER);
-        var startYpoint = 0;
-        var thisStroke = state_colors[i];
-        stroke(thisStroke[0], thisStroke[1], thisStroke[2]);
-        fill(0);
-        noFill();
-         beginShape();
-         //THEN IT LOOPS THROUGH COLUMNS TO GET THE POINTS FOR THAT COUNTRY
-        for (var c = 1999; c < 2014; c++) {
-          var theYear = c;
-          var Yvalue = Number(newRows[i].getString(String(theYear)))
-          //console.log(Yvalue);
-          if(!isNaN(Yvalue) && Yvalue > 0) {
-            var Xpoint = map(theYear,1999, 2013, 150, width-50);
-            var Ypoint = map(Yvalue,0, inputX, height-50,50);
-            ellipse(Xpoint,Ypoint,8,8);
-            if(startYpoint === 0) {
-              startYpoint = Yvalue;
-              strokeWeight(1);
-              text(countryName,Xpoint-10,Ypoint);
-              strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-              curveVertex(Xpoint,Ypoint);
-            } else if (c == table.getColumnCount() - 1) {
-	          strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-              curveVertex(Xpoint,Ypoint);
-              } else {
-	          strokeWeight(2);
-              curveVertex(Xpoint,Ypoint);
-
-            }
-          }
-
-        }
-        endShape();
-
-     }
-   //console.log(cause);
-   }
-
-
-
-  // var pew = new p5.Table(newRows);
-   //onsole.log(pew);
-
-//the drawing of axes is now in a separate functions. You don't need to touch that.
-
-
-//Here is an array for countries (by rownumber)
-
-
-//HERE IS THE CODE FOR DRAWING THE COUNTRIES
-//IT STARTS BY GOING LOOPS THROUGH ROWS
-
-}
-
-
-
-
-
-// function draw() {
-// don't need draw to run
-// }
-
-function makeAxis(inMax) {
-	stroke(255);
-    //draw xaxis
-    line(150,height-50,width-50,height-50);
-    //draw yaxis
-    line(150,50,150,height-50);
-    //xaxis vaules
-    for(var i = 0; i < inMax * 1.2; i = i + 5) {
-      //rounding is here because of floating point issue
-      var rounded = Math.round(i);
-      //console.log(rounded);
-      yvalue = map(i,inMax,height-50,50);
-      textAlign(RIGHT,CENTER)
-      text(rounded,140,yvalue);
-      line(145,yvalue,155,yvalue);
-
-    }
-    //yaxis values
-     for (var c = 1999; c < 2014; c++) {
-       //number() is here, though might not need
-       var myYear = c;
-   //    console.log(myYear);
-       var xvalue = map(myYear,1999,2013,150,width-50)
-      // console.log(table.columns[c]);
-       textAlign(CENTER,BOTTOM);
-       text(myYear,xvalue,height-30);
-       line(xvalue,height-55,xvalue,height-45);
-
-     }
-}
-
-function maxX(someArray) {
-	var top_x = 0;
-	for(var check_row = 0; check_row < someArray.length; check_row ++){
-		for (var year = 1999; year < 2014; year++) {
-          var check_value = Number(someArray[check_row].getString(String(year)));
-		  if(check_value > top_x){
-		  	top_x = check_value;
-		  }
-		  }
+	for (var i = 0; i < flat_up.length; i++){
+ 		console.log(flat_up[i]["unfollowed"]);
+		var x = (flat_up[i]["unfollowed"] - 1 + Math.random());
+// 		var y = Math.random() * (2 * windowHeight/3);
+		flat_up_coord.push(x);
 	}
 
-	return top_x;
+	for (var i = 0; i < flat_down.length; i++){
+// 		console.log(flat_down[i]["unfollowed"]);
+		var x1 = (flat_down[i]["following"] - 2 + Math.random());
+		var x2 = (flat_down[i]["follower"] - 2 + Math.random());
+		var y = Math.random() * (windowHeight/3) + 2 * windowHeight/8;
+		flat_down_coord.push([x1, x2, y]);
+	}
+	
+	for (var i = 0; i < flat_down_up.length; i++){
+		console.log(flat_down_up[i]["unfollowed"]);
+		var x1 = (flat_down_up[i]["following"] - 2 + Math.random());
+		var x2 = (flat_down_up[i]["follower"] - 2 + Math.random());
+		var x3 = (flat_down_up[i]["unfollowed"] - 2 + Math.random());
+		var y = Math.random()  *(windowHeight/3) +   windowHeight/3;
+		flat_down_up_coord.push([x1, x2, x3, y]);
+}
+
+	for (var i = 0; i < up_flat.length; i++){
+//  		console.log(up_flat[i]["follower"]);
+		var x = (up_flat[i]["follower"] - 1 + Math.random());
+// 		var y = Math.random() * (2 * windowHeight/3);
+		up_flat_coord.push(x);
+	}
+	
+	for (var i = 0; i < up_flat_down.length; i++){
+// 		console.log(up_flat_down[i]["unfollowed"]);
+		var x1 = (up_flat_down[i]["follower"] - 2 + Math.random());
+		var x2 = (up_flat_down[i]["unfollowed"] - 2 + Math.random());
+
+// 		var y = Math.random()  *(windowHeight/3) +   windowHeight/3;
+		up_flat_down_coord.push([x1, x2]);
+}
+	
+// 	flat_down_coord
+	console.log(up_flat_coord);
+}
+
+
+function draw() {
+   
+createCanvas(windowWidth, windowHeight);
+background(40);
+
+
+for (var lx = 1; lx < 7; lx++){
+	stroke(250, 250, 250,30);
+	line_x = map(lx, 0, 7, 0, windowWidth);
+	line(line_x, 0 , line_x,  windowHeight);
+	
+	noStroke();
+	fill(250, 250, 250);
+	var some_day = "day " + lx;
+	text(some_day, line_x-windowWidth/12, 30);
+	
+}
+
+noStroke();
+fill(160, 79, 63)
+var orange_text = "Bots following me and dropping: " + up_flat_down_coord.length;
+text(orange_text, 30, 80);
+
+fill(117, 101, 14)
+var swamp_text = "I followed, they followerd back and dropped: " + flat_down_up_coord.length;
+text(swamp_text, 30, 80 + 25);
+
+fill(2, 122, 106)
+var teal_text = "I am following and they dropped: " + flat_up_coord.length;
+text(teal_text, 30, 80 + 25 + 25);
+
+fill(89, 221, 77)
+var lgreen_text = "I followed and they followed back: " + flat_down_coord.length;
+text(lgreen_text, 30, 80 + 25 + 25 + 25);
+
+
+fill(2, 122, 64)
+var dgreen_text = "My pre-bot followers : " + flat.length;
+text(dgreen_text, 30, 80 + 25 + 25 + 25 + 25);
+
+fill(219, 142, 41)
+var orange_text = "Bots following me : " + up_flat_coord.length;
+text(orange_text, 30, 80 + 25 + 25 + 25 + 25 + 25);	
+
+fill(169, 169, 169)
+var white_text = "I followed and they didn't respond : " + up_flat_up.length + " (obviously not plotted)";
+text(white_text, 30, 80 + 25 + 25 + 25 + 25 + 25 + 25);	
+
+
+
+
+	
+	
+// PLOT THE FLAT ONES
+
+for(var i = 0; i < up_flat_down_coord.length; i ++){
+	stroke(160, 79, 63);
+// 	console.log(flat_up_coord[i]);
+	var x1 = map(up_flat_down_coord[i][0], 0, 7, 0, windowWidth - 20);
+	var x2 = map(up_flat_down_coord[i][1], 0, 7, 0, windowWidth - 20);
+	noFill();
+// 	line(0, 2 * windowHeight/3 - i , x, 2 * windowHeight/3 - i);
+	bezier(x1 , windowHeight, 
+		   x1 , windowHeight - 200, 
+		   x2 - 50 , 2 * windowHeight/3 + flat.length + i, 
+		   x2, 2 * windowHeight/3 + flat.length + i);
+	
+	
+	bezier(x2 , 		2 * windowHeight/3 + flat.length + i, 
+		   x2 + 50 , 2 * windowHeight/3 + flat.length + i - 50, 
+		   windowWidth - 200 , windowHeight/3 - flat_up_coord.length - flat_down_up_coord.length - i - 50, 
+		   windowWidth - 20, windowHeight/3 - flat_up_coord.length - flat_down_up_coord.length - i);
+	
+
+	
+	}
+	
+	
+	
+for(var i = 0; i <= flat.length; i ++){
+	stroke(2, 122, 64);
+/*
+	line(0, 2 * windowHeight/3 + i , 
+		windowWidth - 20, 2 * windowHeight/3 + i);
+*/
+	
+	bezier(0 , 		2 * windowHeight/3 + i, 
+	   100 , 2 * windowHeight/3 + i, 
+	   windowWidth - 100 , 2 * windowHeight/3 + i, 
+	   windowWidth - 20, 2 * windowHeight/3 + i)}
+	
+// console.log(flat_down_coord);
+// 	flat_up_coord
+for(var xi = 0; xi < flat_down_coord.length; xi ++){
+	
+	stroke(89, 221, 77);
+// 	console.log(flat_down_coord[xi]);
+	var x1 = map(flat_down_coord[xi][0], 0, 7, 0, windowWidth - 20);
+	var x2 = map(flat_down_coord[xi][1], 0, 7, 0, windowWidth - 20);
+// 	noFill();
+/*
+	line(x1, flat_down_coord[xi][2] , x2, flat_down_coord[xi][2]);
+	bezier(x2 , flat_down_coord[xi][2], x2 + 100, flat_down_coord[xi][2], 
+		windowWidth - 20 - 150 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
+		windowWidth - 20 ,  2 * windowHeight/3 - flat_up_coord.length - xi);
+*/
+		
+	if (xi != 30){
+	
+		noFill();
+		stroke(89, 221, 77);
+		line(x1, flat_down_coord[xi][2] , x2, flat_down_coord[xi][2]);
+		bezier(x2 , flat_down_coord[xi][2], x2 + 100, flat_down_coord[xi][2], 
+		windowWidth - 20 - 150 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
+		windowWidth - 20 ,  2 * windowHeight/3 - flat_up_coord.length - xi);
+	} else {
+// 		noStroke()
+
+	
+		white_x1 = x1;
+		white_x2 = x2;
+		white_y = flat_down_coord[xi][2];
+				
+		noFill();
+		strokeWeight(4);
+		stroke(221, 221, 221);
+		line(x1, flat_down_coord[xi][2] , x2, flat_down_coord[xi][2]);
+		bezier(x2 , flat_down_coord[xi][2], x2 + 100, flat_down_coord[xi][2], 
+		windowWidth - 20 - 150 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
+		windowWidth - 20 ,  2 * windowHeight/3 - flat_up_coord.length - xi);
+		strokeWeight(1);
+	}
+	noFill();
+/*
+	line(windowWidth - 20 - 80,  2 * windowHeight/3 - flat_up_coord.length - xi,
+		 windowWidth - 20 , 	  2 * windowHeight/3 - flat_up_coord.length - xi);
+*/
+	}
+
+for(var xi = 0; xi < flat_down_up_coord.length; xi ++){
+	stroke(117, 101, 14);
+// 	console.log(flat_down_up[xi]);
+	var x1 = map(flat_down_up_coord[xi][0], 0, 7, 0, windowWidth - 20);
+	var x2 = map(flat_down_up_coord[xi][1], 0, 7, 0, windowWidth - 20);
+	var x3 = map(flat_down_up_coord[xi][2], 0, 7, 0, windowWidth - 20);
+// 	noFill();
+	line(x1, flat_down_up_coord[xi][3] , 
+		 x2, flat_down_up_coord[xi][3]);
+		 
+	bezier(x2 ,     	flat_down_up_coord[xi][3], 
+		   x2 + 50, 	flat_down_up_coord[xi][3] + 30, 
+		   x3 - 50 , 	2 * windowHeight/3 - flat_up_coord.length - xi, 
+		   x3 ,	2 * windowHeight/3 - flat_up_coord.length - xi);
+		   
+	bezier(x3 ,	2 * windowHeight/3 - flat_up_coord.length - xi, 
+		   x3 + 50,	2 * windowHeight/3 - flat_up_coord.length - xi, 
+		   windowWidth - 20 - 150 , windowHeight/3 - flat_up_coord.length - xi , 
+		   windowWidth - 20 , windowHeight/3 - flat_up_coord.length - xi );
+	}	
+	
+
+	
+	
+	
+for(var i = 0; i <= flat_up_coord.length; i ++){
+	stroke(2, 122, 106);
+// 	console.log(flat_up_coord[i]);
+	var x = map(flat_up_coord[i], 0, 7, 0, windowWidth - 20);
+	noFill();
+	line(0, 2 * windowHeight/3 - i , x, 2 * windowHeight/3 - i);
+		bezier(x , 2 * windowHeight/3 - i, x + 100, 2 * windowHeight/3 - i - 30, 
+			windowWidth - 20 - 15 , windowHeight/3-i+15, windowWidth - 20, windowHeight/3-i);
+	}
+
+
+for(var i = 0; i <= up_flat_coord.length; i ++){
+	stroke(219, 142, 41);
+// 	console.log(flat_up_coord[i]);
+	var x = map(up_flat_coord[i], 0, 7, 0, windowWidth - 20);
+	noFill();
+// 	line(0, 2 * windowHeight/3 - i , x, 2 * windowHeight/3 - i);
+	bezier(x , 		windowHeight, 
+		   x , windowHeight - 350, 
+		   windowWidth - 400 , 2 * windowHeight/3 + flat.length + i, 
+		   windowWidth - 20, 2 * windowHeight/3 + flat.length + i);
+	}
+
+
+
+noStroke();
+// stroke(0, 0, 0);
+fill(221, 221, 221)
+var white_text1 = "I clicked 'follow'";
+text(white_text1, white_x1 + 30, white_y-15);
+
+stroke(0, 0, 0);
+ellipse(white_x1, white_y, 10, 10);
+noStroke();
+var white_text2 = "They followed me back";
+text(white_text2, white_x2 + 50, white_y + 15);
+stroke(0, 0, 0);
+ellipse(white_x2 , white_y, 10, 10);
+
+// console.log(table);
+
+
 }
