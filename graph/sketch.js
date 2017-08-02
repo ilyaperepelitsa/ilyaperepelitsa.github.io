@@ -265,8 +265,9 @@ for(var xi = 0; xi < flat_down_coord.length; xi ++){
 		noFill();
 		stroke(89, 221, 77);
 		line(x1, flat_down_coord[xi][2] , x2, flat_down_coord[xi][2]);
-		bezier(x2 , flat_down_coord[xi][2], x2 + 100, flat_down_coord[xi][2], 
-		windowWidth - 20 - 150 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
+		bezier(x2 , flat_down_coord[xi][2], 
+			   x2 + 250, flat_down_coord[xi][2], 
+		windowWidth - 20 - 250 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
 		windowWidth - 20 ,  2 * windowHeight/3 - flat_up_coord.length - xi);
 	} else {
 // 		noStroke()
@@ -280,8 +281,9 @@ for(var xi = 0; xi < flat_down_coord.length; xi ++){
 		strokeWeight(4);
 		stroke(221, 221, 221);
 		line(x1, flat_down_coord[xi][2] , x2, flat_down_coord[xi][2]);
-		bezier(x2 , flat_down_coord[xi][2], x2 + 100, flat_down_coord[xi][2], 
-		windowWidth - 20 - 150 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
+		bezier(x2 , flat_down_coord[xi][2], 
+			   x2 + 250, flat_down_coord[xi][2], 
+		windowWidth - 20 - 250 , 2 * windowHeight/3 - flat_up_coord.length - xi, 
 		windowWidth - 20 ,  2 * windowHeight/3 - flat_up_coord.length - xi);
 		strokeWeight(1);
 	}
