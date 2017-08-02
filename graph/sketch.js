@@ -305,13 +305,13 @@ for(var xi = 0; xi < flat_down_up_coord.length; xi ++){
 		 x2, flat_down_up_coord[xi][3]);
 		 
 	bezier(x2 ,     	flat_down_up_coord[xi][3], 
-		   x2 + 50, 	flat_down_up_coord[xi][3] + 30, 
+		   x2 + 100, 	flat_down_up_coord[xi][3] + 30, 
 		   x3 - 50 , 	2 * windowHeight/3 - flat_up_coord.length - xi, 
 		   x3 ,	2 * windowHeight/3 - flat_up_coord.length - xi);
 		   
 	bezier(x3 ,	2 * windowHeight/3 - flat_up_coord.length - xi, 
-		   x3 + 50,	2 * windowHeight/3 - flat_up_coord.length - xi, 
-		   windowWidth - 20 - 150 , windowHeight/3 - flat_up_coord.length - xi , 
+		   x3 + 250,	2 * windowHeight/3 - flat_up_coord.length - xi, 
+		   windowWidth - 20 - 250 , windowHeight/3 - flat_up_coord.length - xi , 
 		   windowWidth - 20 , windowHeight/3 - flat_up_coord.length - xi );
 	}	
 	
@@ -325,8 +325,10 @@ for(var i = 0; i <= flat_up_coord.length; i ++){
 	var x = map(flat_up_coord[i], 0, 7, 0, windowWidth - 20);
 	noFill();
 	line(0, 2 * windowHeight/3 - i , x, 2 * windowHeight/3 - i);
-		bezier(x , 2 * windowHeight/3 - i, x + 100, 2 * windowHeight/3 - i - 30, 
-			windowWidth - 20 - 15 , windowHeight/3-i+15, windowWidth - 20, windowHeight/3-i);
+		bezier(x , 2 * windowHeight/3 - i, 
+			   x + 150, 2 * windowHeight/3 - i - 30, 
+			    windowWidth - 20 - 150 , windowHeight/3-i+15, 
+			    windowWidth - 20, windowHeight/3-i);
 	}
 
 
